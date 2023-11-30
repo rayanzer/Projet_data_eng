@@ -44,6 +44,11 @@ def dim_red(mat,cor, p, method):
         red_mat = mat[:,:p]
         umap_model =umap.UMAP()  # Use umap.UMAP to create an instance of the UMAP class
     	red_mat= umap_model.fit_transform(mat)
+    elif method =="TSNE-emb":
+	# Apply t-SNE for dimensionality reduction
+        tsne = TSNE(n_components=3, random_state=42)
+        red_mat = tsne.fit_transform(mat)
+
     else:
         raise Exception("Please select one of the three methods : APC, AFC, UMAP")
     
@@ -79,7 +84,7 @@ embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
 
-methods = ['ACP', 'TSNE', 'UMAP']
+methods = ['ACP', 'TSNE', 'UMAP', 'TSNE-emb']
 for method in methods:
     # Perform dimensionality reduction
     red_emb = dim_red(embeddings,corpus, 20, method)
