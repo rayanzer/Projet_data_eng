@@ -4,7 +4,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 
 
-def dim_red(mat, p, method):
+def dim_red(mat,cor, p, method):
     '''
     Perform dimensionality reduction
 
@@ -25,7 +25,13 @@ def dim_red(mat, p, method):
         
     elif method=='UMAP':
         red_mat = mat[:,:p]
-        
+        # Vectorize the text data using TF-IDF
+	vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
+	X = vectorizer.fit_transform(cor)
+
+	# Apply t-SNE for dimensionality reduction	
+	tsne = TSNE(n_components=3, random_state=42)
+	red_mat = tsne.fit_transform(X.toarray())
     else:
         raise Exception("Please select one of the three methods : APC, AFC, UMAP")
     
@@ -63,7 +69,7 @@ embeddings = model.encode(corpus)
 methods = ['ACP', 'AFC', 'UMAP']
 for method in methods:
     # Perform dimensionality reduction
-    red_emb = dim_red(embeddings, 20, method)
+    red_emb = dim_red(embeddings,corpus, 20, method)
 
     # Perform clustering
     pred = clust(red_emb, k)
