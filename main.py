@@ -2,6 +2,10 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn.metrics.cluster import normalized_mutual_info_score, adjusted_rand_score
 from sentence_transformers import SentenceTransformer
 import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.manifold import TSNE
+import umap
 
 
 def dim_red(mat,cor, p, method):
@@ -33,6 +37,8 @@ def dim_red(mat,cor, p, method):
 
     elif method=='UMAP':
         red_mat = mat[:,:p]
+        umap_model =umap.UMAP()  # Use umap.UMAP to create an instance of the UMAP class
+    	red_mat= umap_model.fit_transform(mat)
     else:
         raise Exception("Please select one of the three methods : APC, AFC, UMAP")
     
@@ -67,7 +73,7 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
-methods = ['ACP', 'AFC', 'UMAP']
+methods = ['ACP', 'TSNE', 'UMAP']
 for method in methods:
     # Perform dimensionality reduction
     red_emb = dim_red(embeddings,corpus, 20, method)
