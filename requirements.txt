@@ -1,3 +1,2 @@
 scikit-learn
-sentence-transformers
 umap-learn
