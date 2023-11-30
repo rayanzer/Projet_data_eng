@@ -1,13 +1,12 @@
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.metrics.cluster import normalized_mutual_info_score, adjusted_rand_score
-from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import TSNE
 import umap
 from sklearn.cluster import KMeans
-
+from pandas as pd
 def dim_red(mat,cor, p, method):
 
 
@@ -26,20 +25,17 @@ def dim_red(mat,cor, p, method):
         red_mat : NxP list such that p<<m
     '''
     if method=='ACP':
-        red_mat = mat[:,:p]
-
-        pca = PCA(n_components=20)
+	red_mat = mat[:,:p]
+	pca = PCA(n_components=20)
 	red_mat = pca.fit_transform(mat)
     elif method=='TSNE':
-      	red_mat = mat[:,:p]
+	red_mat = mat[:,:p]
 	# Vectorize the text data using TF-IDF
 	vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
 	X = vectorizer.fit_transform(cor)
-
 	# Apply t-SNE for dimensionality reduction
 	tsne = TSNE(n_components=3, random_state=42)
 	red_mat = tsne.fit_transform(X.toarray())
-
     elif method=='UMAP':
         red_mat = mat[:,:p]
         umap_model =umap.UMAP()  # Use umap.UMAP to create an instance of the UMAP class
@@ -72,16 +68,12 @@ def clust(mat, k):
     
     return pred
 
-# import data
-ng20 = fetch_20newsgroups(subset='test')
-corpus = ng20.data[:2000]
-labels = ng20.target[:2000]
-k = len(set(labels))
+#charger les  données
+# Lire le fichier CSV contenant les embeddings
+embeddings_df = pd.read_csv('data/embeddings.csv')
 
-# embedding
-model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-embeddings = model.encode(corpus)
-
+# Convertir le DataFrame en array NumPy
+embeddings = embeddings_df.values
 # Perform dimensionality reduction and clustering for each method
 
 methods = ['ACP', 'TSNE', 'UMAP', 'TSNE-emb']
