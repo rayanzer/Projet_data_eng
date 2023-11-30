@@ -18,7 +18,8 @@ def dim_red(mat, p, method):
     '''
     if method=='ACP':
         red_mat = mat[:,:p]
-        
+        pca = PCA(n_components=20)
+	red_mat = pca.fit_transform(embeddings)
     elif method=='AFC':
         red_mat = mat[:,:p]
         
