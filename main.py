@@ -18,20 +18,21 @@ def dim_red(mat,cor, p, method):
     '''
     if method=='ACP':
         red_mat = mat[:,:p]
+
         pca = PCA(n_components=20)
-	red_mat = pca.fit_transform(embeddings)
-    elif method=='AFC':
-        red_mat = mat[:,:p]
-        
-    elif method=='UMAP':
-        red_mat = mat[:,:p]
-        # Vectorize the text data using TF-IDF
+	red_mat = pca.fit_transform(mat)
+    elif method=='TSNE':
+      	red_mat = mat[:,:p]
+	# Vectorize the text data using TF-IDF
 	vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
 	X = vectorizer.fit_transform(cor)
 
-	# Apply t-SNE for dimensionality reduction	
+	# Apply t-SNE for dimensionality reduction
 	tsne = TSNE(n_components=3, random_state=42)
 	red_mat = tsne.fit_transform(X.toarray())
+
+    elif method=='UMAP':
+        red_mat = mat[:,:p]
     else:
         raise Exception("Please select one of the three methods : APC, AFC, UMAP")
     
