@@ -11,7 +11,7 @@ def dim_red(mat, p, method):
     Input:
     -----
         mat : NxM list 
-        p : number of dimensions to keep 
+       p : number of dimensions to keep 
     Output:
     ------
         red_mat : NxP list such that p<<m
