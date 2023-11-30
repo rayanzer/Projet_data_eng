@@ -8,7 +8,7 @@ import umap
 from sklearn.cluster import KMeans
 import pandas as pd
 
-def dim_red(mat,cor, p, method):
+def dim_red(mat, p, method):
         '''
         Perform dimensionality reduction
 
@@ -25,14 +25,16 @@ def dim_red(mat,cor, p, method):
             red_mat = mat[:,:p]
             pca = PCA(n_components=20)
             red_mat = pca.fit_transform(mat)
+            
         elif method=='TSNE':
             red_mat = mat[:,:p]
-        # Vectorize the text data using TF-IDF
+                # Vectorize the text data using TF-IDF
             vectorizer = TfidfVectorizer(max_features=5000, stop_words='english')
             X = vectorizer.fit_transform(cor)
-        # Apply t-SNE for dimensionality reduction
+                # Apply t-SNE for dimensionality reduction
             tsne = TSNE(n_components=3, random_state=42)
             red_mat = tsne.fit_transform(X.toarray())
+            
         elif method=='UMAP':
             red_mat = mat[:,:p]
             umap_model =umap.UMAP()  # Use umap.UMAP to create an instance of the UMAP class
@@ -65,6 +67,11 @@ def clust(mat, k):
         
         return pred
 
+ 
+ng20 = fetch_20newsgroups(subset='test')
+corpus = ng20.data[:2000]
+labels = ng20.target[:2000]
+k = len(set(labels))
     #charger les  données
     # Lire le fichier CSV contenant les embeddings
 embeddings_df = pd.read_csv('data/embeddings.csv')
@@ -73,10 +80,10 @@ embeddings_df = pd.read_csv('data/embeddings.csv')
 embeddings = embeddings_df.values
     # Perform dimensionality reduction and clustering for each method
 
-methods = ['ACP', 'TSNE', 'UMAP', 'TSNE-emb']
+methods = ['ACP', 'UMAP', 'TSNE','TSNE-emb']
 for method in methods:
         # Perform dimensionality reduction
-    red_emb = dim_red(embeddings,corpus, 20, method)
+    red_emb = dim_red(embeddings,corpus, k, method)
 
         # Perform clustering
     pred = clust(red_emb, k)
