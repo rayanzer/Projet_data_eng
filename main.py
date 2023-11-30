@@ -6,12 +6,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import TSNE
 import umap
 from sklearn.cluster import KMeans
-from pandas as pd
+import pandas as pd
+
 def dim_red(mat,cor, p, method):
-
-
-
-
     '''
     Perform dimensionality reduction
 
