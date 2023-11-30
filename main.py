@@ -9,13 +9,18 @@ import umap
 
 
 def dim_red(mat,cor, p, method):
+
+
+
+
     '''
     Perform dimensionality reduction
 
     Input:
     -----
         mat : NxM list 
-       p : number of dimensions to keep 
+
+        p : number of dimensions to keep
     Output:
     ------
         red_mat : NxP list such that p<<m
@@ -73,6 +78,7 @@ model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 embeddings = model.encode(corpus)
 
 # Perform dimensionality reduction and clustering for each method
+
 methods = ['ACP', 'TSNE', 'UMAP']
 for method in methods:
     # Perform dimensionality reduction
@@ -87,3 +93,4 @@ for method in methods:
 
     # Print results
     print(f'Method: {method}\nNMI: {nmi_score:.2f} \nARI: {ari_score:.2f}\n')
+
