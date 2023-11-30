@@ -8,7 +8,7 @@ import umap
 from sklearn.cluster import KMeans
 import pandas as pd
 
-def dim_red(mat, p, method):
+def dim_red(mat, cor, p, method):
         '''
         Perform dimensionality reduction
 
