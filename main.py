@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.manifold import TSNE
 import umap
-
+from sklearn.cluster import KMeans
 
 def dim_red(mat,cor, p, method):
 
@@ -62,8 +62,8 @@ def clust(mat, k):
     ------
         pred : list of predicted labels
     '''
-    
-    pred = np.random.randint(k, size=len(mat))
+    kmeans =KMeans (n_clusters = k, random_state = 42)
+    pred = kmeans.fit_predict(mat)
     
     return pred
 
